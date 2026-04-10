@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  background: #0a0a0a;
+  color: gold;
+  text-align: center;
+  font-family: Arial;
+}
+
+header {
+  padding: 30px;
+  background: black;
+}
+
+.balance {
+  font-size: 24px;
+  margin: 20px;
+}
+
+.game {
+  margin-top: 50px;
+}
+
+#slot {
+  font-size: 60px;
+  margin: 20px;
+}
+
+button {
+  padding: 15px 30px;
+  font-size: 20px;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: darkred;
+}
