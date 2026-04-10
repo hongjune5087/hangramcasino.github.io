@@ -1,63 +1,54 @@
 body {
   margin: 0;
-  background: radial-gradient(circle, #1a1a1a, black);
-  color: gold;
-  font-family: Arial;
-  text-align: center;
-}
-
-.machine {
-  margin-top: 50px;
-}
-
-h1 {
-  color: orange;
-  text-shadow: 0 0 10px red;
-}
-
-.balance {
-  font-size: 24px;
-  margin: 20px;
-}
-
-.reels {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 30px;
-}
-
-.reel {
-  width: 100px;
-  height: 100px;
   background: black;
-  border: 5px solid orange;
-  font-size: 40px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  box-shadow: 0 0 20px red inset;
+  align-items: center;
+  height: 100vh;
 }
 
-.controls button {
-  padding: 15px 25px;
-  font-size: 18px;
-  margin: 10px;
-  border: none;
-  cursor: pointer;
+/* 전체 머신 */
+.machine {
+  position: relative;
+  width: 800px;
 }
 
-.spin {
-  background: #00c3ff;
-  color: black;
+/* 슬롯 이미지 */
+.bg {
+  width: 100%;
+  display: block;
+}
+
+/* 잔액 위치 */
+.money {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #00ffcc;
+  font-size: 28px;
   font-weight: bold;
 }
 
-button:hover {
-  transform: scale(1.1);
+/* 결과 표시 */
+.result {
+  position: absolute;
+  top: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 60px;
+  color: white;
+  letter-spacing: 20px;
 }
 
-#msg {
-  margin-top: 20px;
-  color: white;
+/* 스핀 버튼 위치 (이미지 기준으로 조정 필요) */
+.spin-btn {
+  position: absolute;
+  bottom: 30px;
+  right: 50px;
+  padding: 15px 25px;
+  font-size: 20px;
+  background: #00c3ff;
+  border: none;
+  cursor: pointer;
 }
