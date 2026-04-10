@@ -1,14 +1,18 @@
 body {
   margin: 0;
-  background: #0a0a0a;
+  background: radial-gradient(circle, #1a1a1a, black);
   color: gold;
-  text-align: center;
   font-family: Arial;
+  text-align: center;
 }
 
-header {
-  padding: 30px;
-  background: black;
+.machine {
+  margin-top: 50px;
+}
+
+h1 {
+  color: orange;
+  text-shadow: 0 0 10px red;
 }
 
 .balance {
@@ -16,24 +20,44 @@ header {
   margin: 20px;
 }
 
-.game {
-  margin-top: 50px;
+.reels {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 30px;
 }
 
-#slot {
-  font-size: 60px;
-  margin: 20px;
+.reel {
+  width: 100px;
+  height: 100px;
+  background: black;
+  border: 5px solid orange;
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px red inset;
 }
 
-button {
-  padding: 15px 30px;
-  font-size: 20px;
-  background: red;
-  color: white;
+.controls button {
+  padding: 15px 25px;
+  font-size: 18px;
+  margin: 10px;
   border: none;
   cursor: pointer;
 }
 
+.spin {
+  background: #00c3ff;
+  color: black;
+  font-weight: bold;
+}
+
 button:hover {
-  background: darkred;
+  transform: scale(1.1);
+}
+
+#msg {
+  margin-top: 20px;
+  color: white;
 }
