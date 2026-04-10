@@ -1,41 +1,50 @@
-let money = 100000;
+let money = 1000000;
 let count = 0;
+
+const symbols = ["7", "BAR", "★", "💀"];
 
 function spin() {
   if (money <= 0) {
-    alert("잔액이 없습니다.");
+    endGame();
     return;
   }
 
-  money -= 10000;
+  money -= 100000;
   count++;
 
-  document.getElementById("money").innerText = money;
+  document.getElementById("money").innerText = money.toLocaleString();
 
-  const items = ["💀","❌","💀","❌","💸"];
   let result = "";
 
   for (let i = 0; i < 3; i++) {
-    result += items[Math.floor(Math.random() * items.length)];
+    result += symbols[Math.floor(Math.random() * symbols.length)] + " ";
   }
 
-  document.getElementById("slot").innerText = result;
+  document.getElementById("result").innerText = result;
 
-  setTimeout(() => {
-    // 거의 무조건 지게 만들기
-    alert("당신은 잃었습니다.");
-  }, 300);
+  if (count % 3 === 0) {
+    document.getElementById("result").innerText = "7 7 💀";
+  }
 
-  // 🔥 핵심 반전
-  if (count >= 5) {
+  if (count === 6) {
     setTimeout(() => {
       document.body.innerHTML = `
         <div style="color:white; text-align:center; margin-top:100px;">
-          <h1>이건 게임이 아닙니다</h1>
-          <p>계속 잃는 구조, 눈치채셨나요?</p>
-          <p>현실에서도 똑같습니다.</p>
+          <h1>이건 우연이 아닙니다</h1>
+          <p>당신은 계속 하게끔 설계되었습니다</p>
+          <h2 style="color:red;">현실도 같습니다</h2>
         </div>
       `;
     }, 1000);
   }
+}
+
+function endGame() {
+  document.body.innerHTML = `
+    <div style="color:white; text-align:center; margin-top:100px;">
+      <h1>모든 것을 잃었습니다</h1>
+      <p>처음은 가벼웠습니다.</p>
+      <p>끝은 같았습니다.</p>
+    </div>
+  `;
 }
