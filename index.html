@@ -1,15 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Slot Machine</title>
+  <title>Slot Game</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="slot">
-  <div class="reel" id="reel">🍒</div>
-  <button onclick="spin()">SPIN</button>
+<div class="container">
+  <h1>🎰 SLOT MACHINE</h1>
+
+  <div class="money">
+    💰 잔액: <span id="balance">500000</span>원
+  </div>
+
+  <div class="slot" id="slot">7</div>
+
+  <button onclick="spin()">SPIN (10,000원)</button>
+
+  <div id="result"></div>
 </div>
 
 <script src="script.js"></script>
