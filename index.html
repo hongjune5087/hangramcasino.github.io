@@ -2,30 +2,23 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>GRAND SLOT</title>
+<title>Slot Machine</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="machine">
-  <h1>🎰 GRAND SLOT</h1>
+  <!-- 배경 이미지 -->
+  <img src="slot.png" class="bg">
 
-  <div class="balance">
-    CREDIT: <span id="money">1,000,000</span>
-  </div>
+  <!-- 잔액 -->
+  <div class="money">₩ <span id="money">1000000</span></div>
 
-  <div class="reels">
-    <div class="reel" id="r1">7</div>
-    <div class="reel" id="r2">BAR</div>
-    <div class="reel" id="r3">7</div>
-  </div>
+  <!-- 결과 (슬롯 위에 겹침) -->
+  <div class="result" id="result">---</div>
 
-  <div class="controls">
-    <button onclick="bet()">BET</button>
-    <button onclick="spin()" class="spin">SPIN</button>
-  </div>
-
-  <p id="msg"></p>
+  <!-- SPIN 버튼 (위치 맞춤) -->
+  <button class="spin-btn" onclick="spin()">SPIN</button>
 </div>
 
 <script src="script.js"></script>
