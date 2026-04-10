@@ -1,57 +1,37 @@
 body {
-  margin: 0;
   background: #111;
+  color: white;
+  text-align: center;
+  font-family: Arial;
+}
+
+.slot {
+  margin-top: 120px;
+}
+
+.reel {
+  width: 140px;
+  height: 140px;
+  margin: auto;
+
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
+  justify-content: center;
+
+  font-size: 90px;
+
+  border: 6px solid gold;
+  border-radius: 20px;
+
+  background: white;
+  color: black;
+
+  box-shadow: 0 0 20px gold;
 }
 
-/* 전체 */
-.machine {
-  position: relative;
-  width: 500px;
-}
-
-/* 이미지 */
-.bg {
-  width: 100%;
-  display: block;
-}
-
-/* 슬롯 숫자 위치 (핵심: 이미지에 맞게 조정됨) */
-.slots {
-  position: absolute;
-  top: 160px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 55px;
-  font-size: 40px;
-  font-weight: bold;
-  color: red;
-  text-shadow: 0 0 5px black;
-}
-
-/* 잔액 */
-.money {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: gold;
-  font-size: 20px;
-}
-
-/* 스핀 버튼 위치 (오른쪽 레버 대신 버튼) */
-.spin {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
+button {
+  margin-top: 20px;
   padding: 10px 20px;
-  font-size: 18px;
-  background: cyan;
-  border: none;
+  font-size: 20px;
   cursor: pointer;
 }
