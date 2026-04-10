@@ -1,7 +1,7 @@
-let money = 1000000;
+let money = 500000;
 let count = 0;
 
-const symbols = ["7", "BAR", "★", "💀"];
+const symbols = ["7", "BAR", "A", "🍒", "💀"];
 
 function spin() {
   if (money <= 0) {
@@ -9,34 +9,40 @@ function spin() {
     return;
   }
 
-  money -= 100000;
+  money -= 50000;
   count++;
 
   document.getElementById("money").innerText = money.toLocaleString();
 
-  let result = "";
+  let r1 = random();
+  let r2 = random();
+  let r3 = random();
 
-  for (let i = 0; i < 3; i++) {
-    result += symbols[Math.floor(Math.random() * symbols.length)] + " ";
-  }
-
-  document.getElementById("result").innerText = result;
-
+  // 일부러 아깝게 연출
   if (count % 3 === 0) {
-    document.getElementById("result").innerText = "7 7 💀";
+    r3 = r2;
   }
 
+  document.getElementById("s1").innerText = r1;
+  document.getElementById("s2").innerText = r2;
+  document.getElementById("s3").innerText = r3;
+
+  // 반전
   if (count === 6) {
     setTimeout(() => {
       document.body.innerHTML = `
         <div style="color:white; text-align:center; margin-top:100px;">
-          <h1>이건 우연이 아닙니다</h1>
+          <h1>이건 조작된 시스템입니다</h1>
           <p>당신은 계속 하게끔 설계되었습니다</p>
-          <h2 style="color:red;">현실도 같습니다</h2>
+          <h2 style="color:red;">현실에서도 같습니다</h2>
         </div>
       `;
     }, 1000);
   }
+}
+
+function random() {
+  return symbols[Math.floor(Math.random() * symbols.length)];
 }
 
 function endGame() {
@@ -44,7 +50,7 @@ function endGame() {
     <div style="color:white; text-align:center; margin-top:100px;">
       <h1>모든 것을 잃었습니다</h1>
       <p>처음은 가벼웠습니다.</p>
-      <p>끝은 같았습니다.</p>
+      <p>끝은 같습니다.</p>
     </div>
   `;
 }
