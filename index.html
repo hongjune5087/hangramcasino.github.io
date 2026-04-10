@@ -2,28 +2,31 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Lucky Casino</title>
+<title>GRAND SLOT</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-  <h1>🎰 LUCKY CASINO</h1>
-  <p>지금 바로 행운을 잡으세요</p>
-</header>
+<div class="machine">
+  <h1>🎰 GRAND SLOT</h1>
 
-<section class="balance">
-  💰 잔액: <span id="money">100000</span>원
-</section>
+  <div class="balance">
+    CREDIT: <span id="money">1,000,000</span>
+  </div>
 
-<section class="game">
-  <div id="slot">❓❓❓</div>
-  <button onclick="spin()">베팅하기</button>
-</section>
+  <div class="reels">
+    <div class="reel" id="r1">7</div>
+    <div class="reel" id="r2">BAR</div>
+    <div class="reel" id="r3">7</div>
+  </div>
 
-<footer>
-  <p>© Lucky Casino</p>
-</footer>
+  <div class="controls">
+    <button onclick="bet()">BET</button>
+    <button onclick="spin()" class="spin">SPIN</button>
+  </div>
+
+  <p id="msg"></p>
+</div>
 
 <script src="script.js"></script>
 </body>
