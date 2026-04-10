@@ -8,17 +8,23 @@
 <body>
 
 <div class="machine">
-  <!-- 배경 이미지 -->
-  <img src="slot.png" class="bg">
+
+  <!-- 슬롯 머신 본체 이미지 -->
+  <img src="slot-machine.png" class="bg">
+
+  <!-- 슬롯 결과 (화면 중앙) -->
+  <div class="slots">
+    <span id="s1">7</span>
+    <span id="s2">7</span>
+    <span id="s3">7</span>
+  </div>
 
   <!-- 잔액 -->
-  <div class="money">₩ <span id="money">1000000</span></div>
+  <div class="money">₩ <span id="money">500000</span></div>
 
-  <!-- 결과 (슬롯 위에 겹침) -->
-  <div class="result" id="result">---</div>
+  <!-- 스핀 버튼 (이미지 버튼 위치에 맞춤) -->
+  <button class="spin" onclick="spin()">SPIN</button>
 
-  <!-- SPIN 버튼 (위치 맞춤) -->
-  <button class="spin-btn" onclick="spin()">SPIN</button>
 </div>
 
 <script src="script.js"></script>
