@@ -4,7 +4,13 @@
   <meta charset="UTF-8">
   <title>사이버 도박 예방 슬롯</title>
   <style>
-    body { font-family: Arial; text-align: center; margin-top: 50px; }
+    body { 
+      font-family: Arial; 
+      text-align: center; 
+      margin-top: 50px; 
+      background-color: black; 
+      color: white;
+    }
     .slot { font-size: 40px; margin: 10px; }
     button { padding: 10px 20px; margin: 10px; }
   </style>
@@ -23,8 +29,6 @@
 <button onclick="spin()">돌리기</button>
 <button onclick="charge()">돈 충전</button>
 
-<p id="message"></p>
-
 <script>
 let balance = 200000;
 
@@ -34,7 +38,7 @@ function updateBalance() {
 
 function spin() {
   if (balance < 10000) {
-    document.getElementById('message').innerText = '잔액 부족!';
+    alert('잔액 부족!');
     return;
   }
 
@@ -46,19 +50,18 @@ function spin() {
 
   if (win) {
     n1 = n2 = n3 = Math.floor(Math.random() * 10);
-    balance += 50000; // 당첨 금액
-    document.getElementById('message').innerText = '당첨! (5% 확률)';
+    balance += 50000;
+    alert('당첨! (5% 확률)');
   } else {
     n1 = Math.floor(Math.random() * 10);
     n2 = Math.floor(Math.random() * 10);
     n3 = Math.floor(Math.random() * 10);
 
-    // 혹시라도 같아지면 강제로 다르게
     if (n1 === n2 && n2 === n3) {
       n3 = (n3 + 1) % 10;
     }
 
-    document.getElementById('message').innerText = '꽝';
+    alert('꽝');
   }
 
   document.getElementById('s1').innerText = n1;
@@ -70,7 +73,7 @@ function spin() {
 
 function charge() {
   balance += 100000;
-  document.getElementById('message').innerText = '충전 되었습니다';
+  alert('충전 되었습니다');
   updateBalance();
 }
 </script>
