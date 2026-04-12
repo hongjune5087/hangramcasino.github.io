@@ -2,25 +2,78 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Slot Game</title>
-  <link rel="stylesheet" href="style.css">
+  <title>사이버 도박 예방 슬롯</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 50px; }
+    .slot { font-size: 40px; margin: 10px; }
+    button { padding: 10px 20px; margin: 10px; }
+  </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>🎰 SLOT MACHINE</h1>
+<h1>슬롯 머신 (교육용)</h1>
+<h2 id="balance">잔액: 200000원</h2>
 
-  <div class="money">
-    💰 잔액: <span id="balance">500000</span>원
-  </div>
-
-  <div class="slot" id="slot">7</div>
-
-  <button onclick="spin()">SPIN (10,000원)</button>
-
-  <div id="result"></div>
+<div>
+  <span class="slot" id="s1">0</span>
+  <span class="slot" id="s2">0</span>
+  <span class="slot" id="s3">0</span>
 </div>
 
-<script src="script.js"></script>
+<button onclick="spin()">돌리기</button>
+<button onclick="charge()">돈 충전</button>
+
+<p id="message"></p>
+
+<script>
+let balance = 200000;
+
+function updateBalance() {
+  document.getElementById('balance').innerText = '잔액: ' + balance + '원';
+}
+
+function spin() {
+  if (balance < 10000) {
+    document.getElementById('message').innerText = '잔액 부족!';
+    return;
+  }
+
+  balance -= 10000;
+
+  let win = Math.random() < 0.05; // 5% 확률
+
+  let n1, n2, n3;
+
+  if (win) {
+    n1 = n2 = n3 = Math.floor(Math.random() * 10);
+    balance += 50000; // 당첨 금액
+    document.getElementById('message').innerText = '당첨! (5% 확률)';
+  } else {
+    n1 = Math.floor(Math.random() * 10);
+    n2 = Math.floor(Math.random() * 10);
+    n3 = Math.floor(Math.random() * 10);
+
+    // 혹시라도 같아지면 강제로 다르게
+    if (n1 === n2 && n2 === n3) {
+      n3 = (n3 + 1) % 10;
+    }
+
+    document.getElementById('message').innerText = '꽝';
+  }
+
+  document.getElementById('s1').innerText = n1;
+  document.getElementById('s2').innerText = n2;
+  document.getElementById('s3').innerText = n3;
+
+  updateBalance();
+}
+
+function charge() {
+  balance += 100000;
+  document.getElementById('message').innerText = '충전 되었습니다';
+  updateBalance();
+}
+</script>
+
 </body>
 </html>
