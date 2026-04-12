@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>사이버 도박 예방 슬롯</title>
+  <title>한가람 카지노</title>
   <style>
     body { 
       font-family: Arial; 
@@ -17,8 +17,8 @@
 </head>
 <body>
 
-<h1>슬롯 머신 (교육용)</h1>
-<h2 id="balance">잔액: 200000원</h2>
+<h1>슬롯 머신 게임</h1>
+<h2 id="balance">잔액: 200,000원</h2>
 
 <div>
   <span class="slot" id="s1">0</span>
@@ -61,7 +61,7 @@ function spin() {
       n3 = (n3 + 1) % 10;
     }
 
-    alert('꽝');
+    alert('실패');
   }
 
   document.getElementById('s1').innerText = n1;
@@ -72,7 +72,7 @@ function spin() {
 }
 
 function charge() {
-  balance += 100000;
+  balance += 100,000;
   alert('충전 되었습니다');
   updateBalance();
 }
