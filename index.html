@@ -21,7 +21,6 @@
 
     #result { margin-top:20px; font-size:30px; color:white; height:40px; }
 
-    /* 룰렛 */
     .wheel {
       width:220px;
       height:220px;
@@ -38,8 +37,8 @@
       height:0;
       border-left:10px solid transparent;
       border-right:10px solid transparent;
-      border-bottom:20px solid yellow;
-      margin:auto;
+      border-top:20px solid yellow;
+      margin:0 auto;
     }
 
     .segment {
@@ -115,73 +114,79 @@
 <script>
 let balance = 200000;
 let chargeCount = 0;
-let playCount = 0;
 let slotCounter = 0;
 
 const wheel = document.getElementById('wheel');
 
-// 20칸 생성 (19 꽝 + 1 당첨 = 1/20)
 function initWheel(){
-  wheel.innerHTML = '';
+  wheel.innerHTML='';
   for(let i=0;i<20;i++){
-    let seg = document.createElement('div');
+    let seg=document.createElement('div');
     seg.className='segment';
     seg.style.transform='rotate('+(i*18)+'deg) skewY(-72deg)';
-    seg.innerText = (i===0)?'당첨':'꽝';
-    seg.style.background = (i===0)?'green':'black';
+    seg.innerText=(i===0)?'당첨':'꽝';
+    seg.style.background=(i===0)?'green':'black';
     wheel.appendChild(seg);
   }
 }
-
 initWheel();
 
-function format(num){ return num.toLocaleString(); }
-function updateBalance(){ document.getElementById('balance').innerText='잔액: '+format(balance)+'원'; }
+function format(num){return num.toLocaleString();}
+function updateBalance(){
+  document.getElementById('balance').innerText='잔액: '+format(balance)+'원';
+}
 
-function showGame(game){
+function showGame(g){
   slotGame.classList.add('hidden');
   rouletteGame.classList.add('hidden');
   cardGame.classList.add('hidden');
-  if(game==='roulette') rouletteGame.classList.remove('hidden');
-  else if(game==='card') cardGame.classList.remove('hidden');
+  if(g==='roulette') rouletteGame.classList.remove('hidden');
+  else if(g==='card') cardGame.classList.remove('hidden');
   else slotGame.classList.remove('hidden');
 }
 
-// 슬롯
-function spin(){
-  if(balance<10000) return alert('잔액 부족!');
-  balance-=10000; slotCounter++;
-
+function animateSlots(cb){
   let c=0;
   let i=setInterval(()=>{
     s1.innerText=Math.floor(Math.random()*10);
     s2.innerText=Math.floor(Math.random()*10);
     s3.innerText=Math.floor(Math.random()*10);
-    if(++c>10){ clearInterval(i);
-
-      let win = (slotCounter%15===0);
-      if(win){
-        s1.innerText=s2.innerText=s3.innerText=Math.floor(Math.random()*10);
-        balance+=50000;
-        result.innerText='당첨!';
-      } else {
-        result.innerText='꽝';
-      }
-
-      updateBalance();
-    }
+    if(++c>10){clearInterval(i);cb();}
   },80);
 }
 
-// 룰렛 (정확한 1/20 + 각도 판정)
+function spin(){
+  if(balance<10000) return alert('잔액 부족!');
+  balance-=10000; slotCounter++;
+
+  animateSlots(()=>{
+    let win=(slotCounter%15===0);
+    let n1,n2,n3;
+
+    if(win){
+      n1=n2=n3=Math.floor(Math.random()*10);
+      balance+=50000;
+      result.innerText='당첨!';
+    }else{
+      n1=Math.floor(Math.random()*10);
+      n2=Math.floor(Math.random()*10);
+      n3=Math.floor(Math.random()*10);
+      if(n1===n2&&n2===n3)n3=(n3+1)%10;
+      result.innerText='꽝';
+    }
+
+    s1.innerText=n1;s2.innerText=n2;s3.innerText=n3;
+    updateBalance();
+  });
+}
+
 function playRoulette(){
   if(balance<10000) return alert('잔액 부족!');
-
   balance-=10000;
 
-  let winIndex = Math.floor(Math.random()*20); // 1/20
-  let spins = 720 + Math.random()*360;
-  let finalDeg = spins + (winIndex*18);
+  let winIndex=Math.floor(Math.random()*20);
+  let spins=720+Math.random()*360;
+  let finalDeg=spins+(winIndex*18);
 
   wheel.style.transform='rotate('+finalDeg+'deg)';
 
@@ -189,9 +194,8 @@ function playRoulette(){
     if(winIndex===0){
       balance+=30000;
       result.innerText='당첨!';
-    } else {
-      result.innerText='꽝';
-    }
+    }else result.innerText='꽝';
+
     updateBalance();
   },3000);
 }
@@ -202,23 +206,26 @@ function pickCard(){
 
   let win=Math.random()<0.3;
 
-  result.innerText = win?'당첨!':'꽝';
+  result.innerText=win?'당첨!':'꽝';
   if(win) balance+=20000;
 
   updateBalance();
 }
 
-function login(){
-  if(id.value && pw.value){
-    loginScreen.classList.add('hidden');
-    main.classList.remove('hidden');
-  } else loginMsg.innerText='로그인 실패';
-}
-
 function openCharge(){
   if(chargeCount>=3) return alert('잔액 부족');
-  let card=prompt('카드 번호 입력');
-  if(card){ chargeCount++; balance+=100000; alert('충전 되었습니다'); updateBalance(); }
+
+  let amount = prompt('충전 금액 입력 (숫자)');
+  let card = prompt('카드 번호 입력 (XXXX-XXXX-XXXX-XXXX)');
+
+  amount = parseInt(amount);
+
+  if(card && !isNaN(amount) && amount>0){
+    chargeCount++;
+    balance += amount;
+    alert('충전 되었습니다');
+    updateBalance();
+  }
 }
 </script>
 
