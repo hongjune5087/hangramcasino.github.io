@@ -27,8 +27,16 @@
       cursor: pointer;
     }
 
-    .slot { font-size: 50px; margin: 10px; color: white; }
+    .hidden { display: none; }
+    .slot, .roulette { font-size: 50px; margin: 10px; color: white; }
     button.main { padding: 10px 20px; margin: 10px; }
+
+    #result {
+      margin-top: 20px;
+      font-size: 30px;
+      color: white;
+      height: 40px;
+    }
   </style>
 </head>
 <body>
@@ -36,20 +44,39 @@
 <header>
   <nav>
     <button onclick="openCharge()">메뉴 - 충전</button>
-    <button onclick="alert('다른 게임 준비중...')">메뉴 - 다른 게임</button>
+    <button onclick="openGameMenu()">메뉴 - 다른 게임</button>
   </nav>
 </header>
 
-<h1>불법 슬롯 머신</h1>
+<h1>불법 도박 사이트</h1>
 <h2 id="balance">잔액: 200,000원</h2>
 
-<div>
-  <span class="slot" id="s1">0</span>
-  <span class="slot" id="s2">0</span>
-  <span class="slot" id="s3">0</span>
+<!-- 슬롯 -->
+<div id="slotGame">
+  <h2>슬롯 머신</h2>
+  <div>
+    <span class="slot" id="s1">0</span>
+    <span class="slot" id="s2">0</span>
+    <span class="slot" id="s3">0</span>
+  </div>
+  <button class="main" onclick="spin()">돌리기</button>
 </div>
 
-<button class="main" onclick="spin()">돌리기</button>
+<!-- 룰렛 -->
+<div id="rouletteGame" class="hidden">
+  <h2>룰렛</h2>
+  <div class="roulette" id="rouletteResult">?</div>
+  <button onclick="playRoulette()">돌리기</button>
+</div>
+
+<!-- 카드 -->
+<div id="cardGame" class="hidden">
+  <h2>카드 뽑기</h2>
+  <button onclick="pickCard('red')">빨강</button>
+  <button onclick="pickCard('blue')">파랑</button>
+</div>
+
+<div id="result"></div>
 
 <script>
 let balance = 200000;
@@ -63,6 +90,7 @@ function updateBalance() {
   document.getElementById('balance').innerText = '잔액: ' + format(balance) + '원';
 }
 
+// 슬롯
 function spin() {
   if (balance < 10000) {
     alert('잔액 부족!');
@@ -70,7 +98,6 @@ function spin() {
   }
 
   balance -= 10000;
-
   let win = Math.random() < 0.05;
 
   let n1, n2, n3;
@@ -78,18 +105,15 @@ function spin() {
   if (win) {
     n1 = n2 = n3 = Math.floor(Math.random() * 10);
     balance += 50000;
-    alert('당첨!');
+    document.getElementById('result').innerText = '당첨!';
   } else {
     n1 = Math.floor(Math.random() * 10);
     n2 = Math.floor(Math.random() * 10);
     n3 = Math.floor(Math.random() * 10);
 
-    if (n1 === n2 && n2 === n3) {
-      n3 = (n3 + 1) % 10;
-    }
+    if (n1 === n2 && n2 === n3) n3 = (n3 + 1) % 10;
 
-    // 사이트 내 메시지 느낌 (alert 대신 confirm)
-    confirm('꽝');
+    document.getElementById('result').innerText = '꽝';
   }
 
   document.getElementById('s1').innerText = n1;
@@ -99,6 +123,48 @@ function spin() {
   updateBalance();
 }
 
+// 룰렛
+function playRoulette() {
+  if (balance < 10000) {
+    alert('잔액 부족!');
+    return;
+  }
+
+  balance -= 10000;
+
+  let win = Math.random() < 0.2; // 일부러 높게
+  let result = win ? '당첨' : '꽝';
+
+  document.getElementById('rouletteResult').innerText = result;
+
+  if (win) balance += 30000;
+
+  document.getElementById('result').innerText = result;
+  updateBalance();
+}
+
+// 카드
+function pickCard(choice) {
+  if (balance < 10000) {
+    alert('잔액 부족!');
+    return;
+  }
+
+  balance -= 10000;
+
+  let win = Math.random() < 0.4; // 초반엔 잘 맞는 느낌
+
+  if (win) {
+    balance += 20000;
+    document.getElementById('result').innerText = '당첨!';
+  } else {
+    document.getElementById('result').innerText = '꽝';
+  }
+
+  updateBalance();
+}
+
+// 충전
 function openCharge() {
   if (chargeCount >= 3) {
     alert('잔액 부족');
@@ -112,6 +178,23 @@ function openCharge() {
     balance += 100000;
     alert('충전 되었습니다');
     updateBalance();
+  }
+}
+
+// 게임 메뉴
+function openGameMenu() {
+  let game = prompt('게임 선택: 슬롯 / 룰렛 / 카드');
+
+  document.getElementById('slotGame').classList.add('hidden');
+  document.getElementById('rouletteGame').classList.add('hidden');
+  document.getElementById('cardGame').classList.add('hidden');
+
+  if (game === '룰렛') {
+    document.getElementById('rouletteGame').classList.remove('hidden');
+  } else if (game === '카드') {
+    document.getElementById('cardGame').classList.remove('hidden');
+  } else {
+    document.getElementById('slotGame').classList.remove('hidden');
   }
 }
 </script>
