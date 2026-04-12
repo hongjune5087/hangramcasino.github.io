@@ -2,22 +2,45 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>한가람 카지노</title>
+  <title>사이버 도박 예방 슬롯</title>
   <style>
     body { 
       font-family: Arial; 
       text-align: center; 
-      margin-top: 50px; 
-      background-color: black; 
-      color: white;
+      margin: 0;
+      background: radial-gradient(circle at center, #111 0%, #000 100%);
+      color: #ff3b3b;
     }
-    .slot { font-size: 40px; margin: 10px; }
-    button { padding: 10px 20px; margin: 10px; }
+
+    header {
+      background: #111;
+      padding: 15px;
+      border-bottom: 2px solid red;
+    }
+
+    nav button {
+      background: black;
+      color: red;
+      border: 1px solid red;
+      margin: 5px;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .slot { font-size: 50px; margin: 10px; color: white; }
+    button.main { padding: 10px 20px; margin: 10px; }
   </style>
 </head>
 <body>
 
-<h1>슬롯 머신 게임</h1>
+<header>
+  <nav>
+    <button onclick="openCharge()">메뉴 - 충전</button>
+    <button onclick="alert('다른 게임 준비중...')">메뉴 - 다른 게임</button>
+  </nav>
+</header>
+
+<h1>불법 슬롯 머신</h1>
 <h2 id="balance">잔액: 200,000원</h2>
 
 <div>
@@ -26,14 +49,18 @@
   <span class="slot" id="s3">0</span>
 </div>
 
-<button onclick="spin()">돌리기</button>
-<button onclick="charge()">돈 충전</button>
+<button class="main" onclick="spin()">돌리기</button>
 
 <script>
 let balance = 200000;
+let chargeCount = 0;
+
+function format(num) {
+  return num.toLocaleString();
+}
 
 function updateBalance() {
-  document.getElementById('balance').innerText = '잔액: ' + balance + '원';
+  document.getElementById('balance').innerText = '잔액: ' + format(balance) + '원';
 }
 
 function spin() {
@@ -44,14 +71,14 @@ function spin() {
 
   balance -= 10000;
 
-  let win = Math.random() < 0.05; // 5% 확률
+  let win = Math.random() < 0.05;
 
   let n1, n2, n3;
 
   if (win) {
     n1 = n2 = n3 = Math.floor(Math.random() * 10);
     balance += 50000;
-    alert('당첨! (5% 확률)');
+    alert('당첨!');
   } else {
     n1 = Math.floor(Math.random() * 10);
     n2 = Math.floor(Math.random() * 10);
@@ -61,7 +88,8 @@ function spin() {
       n3 = (n3 + 1) % 10;
     }
 
-    alert('실패');
+    // 사이트 내 메시지 느낌 (alert 대신 confirm)
+    confirm('꽝');
   }
 
   document.getElementById('s1').innerText = n1;
@@ -71,10 +99,20 @@ function spin() {
   updateBalance();
 }
 
-function charge() {
-  balance += 100,000;
-  alert('충전 되었습니다');
-  updateBalance();
+function openCharge() {
+  if (chargeCount >= 3) {
+    alert('잔액 부족');
+    return;
+  }
+
+  let card = prompt('카드 번호 입력 (XXXX-XXXX-XXXX-XXXX)');
+
+  if (card) {
+    chargeCount++;
+    balance += 100000;
+    alert('충전 되었습니다');
+    updateBalance();
+  }
 }
 </script>
 
