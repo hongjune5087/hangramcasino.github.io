@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>사이버 도박 예방</title>
+  <title>한가람 카지노</title>
   <style>
     body { 
       font-family: Arial; 
@@ -117,7 +117,7 @@
   </nav>
 </header>
 
-<h1>불법 도박 사이트</h1>
+<h1>한가람 카지노</h1>
 <h2 id="balance">잔액: 200,000원</h2>
 
 <div id="slotGame">
@@ -226,12 +226,12 @@ function pickCard(choice){
     if(choice==='red') win=Math.random()<0.35;
     if(choice==='black') win=Math.random()<0.25;
 
-    cardBack.innerText = choice.toUpperCase()+'\n'+(win?'당첨':'꽝');
+    cardBack.innerText = choice.toUpperCase()+'\n'+(win?'당첨':'실패');
     card.classList.add('flipped');
 
     if(win) balance+=20000;
 
-    result.innerText=win?'당첨!':'꽝';
+    result.innerText=win?'당첨!':'실패';
     updateBalance();
   },300);
 }
@@ -251,7 +251,7 @@ function playRoulette(){
       balance+=30000;
       result.innerText='당첨!';
     } else {
-      result.innerText='꽝';
+      result.innerText='실패';
     }
     updateBalance();
   },3000);
