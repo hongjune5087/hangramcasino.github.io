@@ -109,7 +109,9 @@ function login() {
 }
 
 function format(num){ return num.toLocaleString(); }
-function updateBalance(){ balanceEl.innerText='잔액: '+format(balance)+'원'; }
+function updateBalance(){
+  document.getElementById('balance').innerText = '잔액: ' + format(balance) + '원';
+}
 
 function showGame(game){
   slotGame.classList.add('hidden');
