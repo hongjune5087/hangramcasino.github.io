@@ -2,13 +2,13 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>사이버 도박 예방 슬롯</title>
+  <title>사이버 도박 예방</title>
   <style>
     body { 
       font-family: Arial; 
       text-align: center; 
       margin: 0;
-      background: radial-gradient(circle at center, #111 0%, #000 100%);
+      background: radial-gradient(circle, #111, #000);
       color: #ff3b3b;
     }
 
@@ -28,14 +28,30 @@
     }
 
     .hidden { display: none; }
-    .slot, .roulette { font-size: 50px; margin: 10px; color: white; }
-    button.main { padding: 10px 20px; margin: 10px; }
+
+    .slot {
+      font-size: 60px;
+      margin: 10px;
+      color: white;
+      display: inline-block;
+      width: 40px;
+    }
 
     #result {
       margin-top: 20px;
       font-size: 30px;
       color: white;
       height: 40px;
+    }
+
+    .flash {
+      animation: flash 0.2s infinite;
+    }
+
+    @keyframes flash {
+      0% { color: red; }
+      50% { color: white; }
+      100% { color: red; }
     }
   </style>
 </head>
@@ -59,13 +75,13 @@
     <span class="slot" id="s2">0</span>
     <span class="slot" id="s3">0</span>
   </div>
-  <button class="main" onclick="spin()">돌리기</button>
+  <button onclick="spin()">돌리기</button>
 </div>
 
 <!-- 룰렛 -->
 <div id="rouletteGame" class="hidden">
   <h2>룰렛</h2>
-  <div class="roulette" id="rouletteResult">?</div>
+  <div id="rouletteResult" class="slot">?</div>
   <button onclick="playRoulette()">돌리기</button>
 </div>
 
@@ -81,6 +97,7 @@
 <script>
 let balance = 200000;
 let chargeCount = 0;
+let playCount = 0;
 
 function format(num) {
   return num.toLocaleString();
@@ -90,7 +107,21 @@ function updateBalance() {
   document.getElementById('balance').innerText = '잔액: ' + format(balance) + '원';
 }
 
-// 슬롯
+// 슬롯 애니메이션
+function animateSlots(callback) {
+  let count = 0;
+  let interval = setInterval(() => {
+    document.getElementById('s1').innerText = Math.floor(Math.random()*10);
+    document.getElementById('s2').innerText = Math.floor(Math.random()*10);
+    document.getElementById('s3').innerText = Math.floor(Math.random()*10);
+    count++;
+    if (count > 10) {
+      clearInterval(interval);
+      callback();
+    }
+  }, 80);
+}
+
 function spin() {
   if (balance < 10000) {
     alert('잔액 부족!');
@@ -98,61 +129,73 @@ function spin() {
   }
 
   balance -= 10000;
-  let win = Math.random() < 0.05;
+  playCount++;
 
-  let n1, n2, n3;
+  animateSlots(() => {
+    let win = playCount < 5 ? true : Math.random() < 0.05; // 초반 당첨 유도
 
-  if (win) {
-    n1 = n2 = n3 = Math.floor(Math.random() * 10);
-    balance += 50000;
-    document.getElementById('result').innerText = '당첨!';
-  } else {
-    n1 = Math.floor(Math.random() * 10);
-    n2 = Math.floor(Math.random() * 10);
-    n3 = Math.floor(Math.random() * 10);
+    let n1, n2, n3;
 
-    if (n1 === n2 && n2 === n3) n3 = (n3 + 1) % 10;
+    if (win) {
+      n1 = n2 = n3 = Math.floor(Math.random() * 10);
+      balance += 50000;
+      document.getElementById('result').innerText = '당첨!';
+    } else {
+      n1 = Math.floor(Math.random() * 10);
+      n2 = Math.floor(Math.random() * 10);
+      n3 = Math.floor(Math.random() * 10);
+      if (n1 === n2 && n2 === n3) n3 = (n3 + 1) % 10;
 
-    document.getElementById('result').innerText = '꽝';
-  }
+      document.getElementById('result').innerText = '꽝';
+    }
 
-  document.getElementById('s1').innerText = n1;
-  document.getElementById('s2').innerText = n2;
-  document.getElementById('s3').innerText = n3;
+    document.getElementById('s1').innerText = n1;
+    document.getElementById('s2').innerText = n2;
+    document.getElementById('s3').innerText = n3;
 
-  updateBalance();
+    updateBalance();
+
+    if (balance <= 0) {
+      document.getElementById('result').innerText = '이미 모든 돈을 잃었습니다';
+      document.getElementById('result').classList.add('flash');
+    }
+  });
 }
 
-// 룰렛
+// 룰렛 (거의 당첨 연출)
 function playRoulette() {
-  if (balance < 10000) {
-    alert('잔액 부족!');
-    return;
-  }
+  if (balance < 10000) return alert('잔액 부족!');
 
   balance -= 10000;
+  let display = document.getElementById('rouletteResult');
 
-  let win = Math.random() < 0.2; // 일부러 높게
-  let result = win ? '당첨' : '꽝';
+  let spins = ['꽝','꽝','당첨','꽝','꽝'];
+  let i = 0;
 
-  document.getElementById('rouletteResult').innerText = result;
+  let interval = setInterval(() => {
+    display.innerText = spins[Math.floor(Math.random()*spins.length)];
+    i++;
+    if (i > 15) {
+      clearInterval(interval);
 
-  if (win) balance += 30000;
+      let win = Math.random() < 0.2;
+      display.innerText = win ? '당첨' : '꽝';
 
-  document.getElementById('result').innerText = result;
-  updateBalance();
+      if (win) balance += 30000;
+      document.getElementById('result').innerText = display.innerText;
+      updateBalance();
+    }
+  }, 100);
 }
 
 // 카드
 function pickCard(choice) {
-  if (balance < 10000) {
-    alert('잔액 부족!');
-    return;
-  }
+  if (balance < 10000) return alert('잔액 부족!');
 
   balance -= 10000;
+  playCount++;
 
-  let win = Math.random() < 0.4; // 초반엔 잘 맞는 느낌
+  let win = playCount < 5 ? true : Math.random() < 0.3;
 
   if (win) {
     balance += 20000;
@@ -181,7 +224,7 @@ function openCharge() {
   }
 }
 
-// 게임 메뉴
+// 메뉴
 function openGameMenu() {
   let game = prompt('게임 선택: 슬롯 / 룰렛 / 카드');
 
