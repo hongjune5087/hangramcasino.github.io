@@ -53,9 +53,6 @@
       color:white;
     }
 
-    .flash { animation: flash 0.2s infinite; }
-    @keyframes flash { 0%{color:red;}50%{color:white;}100%{color:red;} }
-
     #loginScreen { margin-top:150px; }
     input { padding:10px; margin:5px; }
     button { padding:10px 20px; margin:10px; }
@@ -117,6 +114,13 @@ let chargeCount = 0;
 let slotCounter = 0;
 
 const wheel = document.getElementById('wheel');
+const loginScreen = document.getElementById('loginScreen');
+const main = document.getElementById('main');
+const result = document.getElementById('result');
+const balanceEl = document.getElementById('balance');
+const slotGame = document.getElementById('slotGame');
+const rouletteGame = document.getElementById('rouletteGame');
+const cardGame = document.getElementById('cardGame');
 
 function initWheel(){
   wheel.innerHTML='';
@@ -133,13 +137,26 @@ initWheel();
 
 function format(num){return num.toLocaleString();}
 function updateBalance(){
-  document.getElementById('balance').innerText='잔액: '+format(balance)+'원';
+  balanceEl.innerText='잔액: '+format(balance)+'원';
+}
+
+function login(){
+  const id=document.getElementById('id').value;
+  const pw=document.getElementById('pw').value;
+
+  if(id && pw){
+    loginScreen.classList.add('hidden');
+    main.classList.remove('hidden');
+  } else {
+    document.getElementById('loginMsg').innerText='로그인 실패';
+  }
 }
 
 function showGame(g){
   slotGame.classList.add('hidden');
   rouletteGame.classList.add('hidden');
   cardGame.classList.add('hidden');
+
   if(g==='roulette') rouletteGame.classList.remove('hidden');
   else if(g==='card') cardGame.classList.remove('hidden');
   else slotGame.classList.remove('hidden');
@@ -167,7 +184,7 @@ function spin(){
       n1=n2=n3=Math.floor(Math.random()*10);
       balance+=50000;
       result.innerText='당첨!';
-    }else{
+    } else {
       n1=Math.floor(Math.random()*10);
       n2=Math.floor(Math.random()*10);
       n3=Math.floor(Math.random()*10);
@@ -175,7 +192,9 @@ function spin(){
       result.innerText='꽝';
     }
 
-    s1.innerText=n1;s2.innerText=n2;s3.innerText=n3;
+    s1.innerText=n1;
+    s2.innerText=n2;
+    s3.innerText=n3;
     updateBalance();
   });
 }
@@ -194,7 +213,9 @@ function playRoulette(){
     if(winIndex===0){
       balance+=30000;
       result.innerText='당첨!';
-    }else result.innerText='꽝';
+    } else {
+      result.innerText='꽝';
+    }
 
     updateBalance();
   },3000);
