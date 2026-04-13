@@ -1,116 +1,156 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>사이버 도박 예방</title>
+  <meta charset="UTF-8">
+  <title>사이버 도박 예방</title>
+  <style>
+    body { 
+      font-family: Arial; 
+      text-align: center; 
+      margin: 0;
+      background: radial-gradient(circle, #111, #000);
+      color: #ff3b3b;
+    }
 
-<style>
-body{
-  margin:0;
-  background:#000;
-  color:red;
-  text-align:center;
-}
+    header { background:#111; padding:15px; border-bottom:2px solid red; }
+    nav span { color:red; margin:0 10px; cursor:pointer; border-bottom:1px solid red; }
 
-.hidden{display:none;}
+    .hidden { display:none; }
 
-header{
-  background:#111;
-  padding:15px;
-  border-bottom:2px solid red;
-}
+    .slot { font-size:60px; margin:10px; color:white; display:inline-block; width:40px; }
 
-nav span{
-  color:red;
-  margin:0 10px;
-  cursor:pointer;
-  border-bottom:1px solid red;
-}
+    #result { margin-top:20px; font-size:30px; color:white; height:40px; }
 
-.reel{
-  display:inline-block;
-  width:60px;
-  height:80px;
-  overflow:hidden;
-  border:2px solid red;
-}
+    .wheel {
+      width:220px;
+      height:220px;
+      border:5px solid red;
+      border-radius:50%;
+      margin:20px auto;
+      position:relative;
+      transition: transform 3s ease-out;
+      overflow:hidden;
+    }
 
-.numbers div{
-  height:80px;
-  font-size:40px;
-  color:white;
-}
+    .pointer {
+      width:0;
+      height:0;
+      border-left:10px solid transparent;
+      border-right:10px solid transparent;
+      border-top:20px solid yellow;
+      margin:0 auto;
+    }
 
-.flash{animation:flash 0.3s 3;}
-@keyframes flash{50%{background:#300;}}
+    .segment {
+      position:absolute;
+      width:50%;
+      height:50%;
+      transform-origin:100% 100%;
+      font-size:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+    }
 
-.card{
-  width:120px; height:180px;
-  margin:auto;
-  transform-style:preserve-3d;
-  transition:0.8s;
-}
-.card.flipped{transform:rotateY(180deg);}
-.front,.back{
-  position:absolute;
-  width:100%; height:100%;
-  backface-visibility:hidden;
-  border:2px solid red;
-}
-.back{transform:rotateY(180deg);}
-</style>
+    /* 카드 애니메이션 */
+    .card-area{ perspective:1000px; margin-top:20px; }
+
+    .card{
+      width:140px;
+      height:200px;
+      margin:0 auto;
+      position:relative;
+      transform-style:preserve-3d;
+      transition: transform 0.8s;
+    }
+
+    .card.flipped{ transform: rotateY(180deg); }
+
+    .inner{ width:100%; height:100%; position:absolute; transform-style:preserve-3d; }
+
+    .front, .back{
+      position:absolute;
+      width:100%;
+      height:100%;
+      backface-visibility:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      border:2px solid red;
+      border-radius:10px;
+    }
+
+    .front{ background:#111; }
+
+    .back{
+      transform: rotateY(180deg);
+      background:#222;
+      color:white;
+      white-space:pre;
+    }
+
+    #loginScreen { margin-top:150px; }
+    input { padding:10px; margin:5px; }
+    button { padding:10px 20px; margin:10px; }
+  </style>
 </head>
-
 <body>
 
-<!-- 로그인 -->
 <div id="loginScreen">
-<h2>로그인</h2>
-<input id="id"><br>
-<input id="pw" type="password"><br>
-<button onclick="login()">로그인</button>
-<div id="loginMsg"></div>
+  <h1>회원 로그인</h1>
+  <input id="id" placeholder="아이디"><br>
+  <input id="pw" type="password" placeholder="비밀번호"><br>
+  <button onclick="login()">로그인</button>
+  <div id="loginMsg"></div>
 </div>
 
-<!-- 메인 -->
 <div id="main" class="hidden">
 
 <header>
-<nav>
-<span onclick="openCharge()">충전</span>
-<span onclick="showGame('slot')">슬롯</span>
-<span onclick="showGame('roulette')">룰렛</span>
-<span onclick="showGame('card')">카드</span>
-</nav>
+  <nav>
+    <span onclick="openCharge()">충전</span>
+    <span onclick="showGame('slot')">슬롯</span>
+    <span onclick="showGame('roulette')">룰렛</span>
+    <span onclick="showGame('card')">카드</span>
+  </nav>
 </header>
 
+<h1>불법 도박 사이트</h1>
 <h2 id="balance">잔액: 200,000원</h2>
 
-<!-- 슬롯 -->
 <div id="slotGame">
-<div>
-<div class="reel"><div id="r1"></div></div>
-<div class="reel"><div id="r2"></div></div>
-<div class="reel"><div id="r3"></div></div>
-</div>
-<button onclick="spin()">돌리기</button>
+  <h2>슬롯 머신</h2>
+  <div>
+    <span class="slot" id="s1">0</span>
+    <span class="slot" id="s2">0</span>
+    <span class="slot" id="s3">0</span>
+  </div>
+  <button onclick="spin()">돌리기</button>
 </div>
 
-<!-- 룰렛 -->
 <div id="rouletteGame" class="hidden">
-<h2>룰렛 (테스트용)</h2>
-<button onclick="playRoulette()">돌리기</button>
+  <h2>룰렛 (20칸)</h2>
+  <div class="pointer"></div>
+  <div id="wheel" class="wheel"></div>
+  <button onclick="playRoulette()">돌리기</button>
 </div>
 
-<!-- 카드 -->
 <div id="cardGame" class="hidden">
-<div class="card" id="card">
-<div class="front">CARD</div>
-<div class="back" id="cardBack">?</div>
-</div>
-<br>
-<button onclick="pickCard('red')">레드</button>
-<button onclick="pickCard('black')">블랙</button>
+  <h2>카드 뽑기</h2>
+
+  <div class="card-area">
+    <div id="card" class="card">
+      <div class="inner">
+        <div class="front">CARD</div>
+        <div class="back" id="cardBack">?</div>
+      </div>
+    </div>
+  </div>
+
+  <button onclick="pickCard('red')">레드 카드</button>
+  <button onclick="pickCard('black')">블랙 카드</button>
 </div>
 
 <div id="result"></div>
@@ -118,147 +158,118 @@ nav span{
 </div>
 
 <script>
-let balance=200000;
-let count=0;
-let chargeCount=0;
+let balance = 200000;
+let chargeCount = 0;
+let slotCounter = 0;
 
-const result=document.getElementById('result');
-const balanceEl=document.getElementById('balance');
-const card=document.getElementById('card');
-const cardBack=document.getElementById('cardBack');
+const wheel = document.getElementById('wheel');
+const loginScreen = document.getElementById('loginScreen');
+const main = document.getElementById('main');
+const result = document.getElementById('result');
+const balanceEl = document.getElementById('balance');
+const slotGame = document.getElementById('slotGame');
+const rouletteGame = document.getElementById('rouletteGame');
+const cardGame = document.getElementById('cardGame');
+const card = document.getElementById('card');
+const cardBack = document.getElementById('cardBack');
 
-function update(){
-  balanceEl.innerText="잔액: "+balance.toLocaleString()+"원";
+function initWheel(){
+  wheel.innerHTML='';
+  for(let i=0;i<20;i++){
+    let seg=document.createElement('div');
+    seg.className='segment';
+    seg.style.transform='rotate('+(i*18)+'deg) skewY(-72deg)';
+    seg.innerText=(i===0)?'당첨':'꽝';
+    seg.style.background=(i===0)?'green':'black';
+    wheel.appendChild(seg);
+  }
+}
+initWheel();
+
+function format(num){return num.toLocaleString();}
+function updateBalance(){
+  balanceEl.innerText='잔액: '+format(balance)+'원';
 }
 
-/* 로그인 */
 function login(){
-  let id=document.getElementById('id').value;
-  let pw=document.getElementById('pw').value;
+  const id=document.getElementById('id').value;
+  const pw=document.getElementById('pw').value;
 
   if(id && pw){
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('main').classList.remove('hidden');
-  }else{
-    document.getElementById('loginMsg').innerText="로그인 실패";
+    loginScreen.classList.add('hidden');
+    main.classList.remove('hidden');
+  } else {
+    document.getElementById('loginMsg').innerText='로그인 실패';
   }
 }
 
-/* 메뉴 */
 function showGame(g){
-  document.getElementById('slotGame').classList.add('hidden');
-  document.getElementById('rouletteGame').classList.add('hidden');
-  document.getElementById('cardGame').classList.add('hidden');
+  slotGame.classList.add('hidden');
+  rouletteGame.classList.add('hidden');
+  cardGame.classList.add('hidden');
 
-  if(g==='roulette') document.getElementById('rouletteGame').classList.remove('hidden');
-  else if(g==='card') document.getElementById('cardGame').classList.remove('hidden');
-  else document.getElementById('slotGame').classList.remove('hidden');
+  if(g==='roulette') rouletteGame.classList.remove('hidden');
+  else if(g==='card') cardGame.classList.remove('hidden');
+  else slotGame.classList.remove('hidden');
 }
 
-/* 슬롯 */
-function fill(el){
-  el.innerHTML="";
-  for(let i=0;i<20;i++){
-    let d=document.createElement('div');
-    d.innerText=Math.floor(Math.random()*10);
-    el.appendChild(d);
-  }
-}
-
-function spin(){
-  if(balance<10000)return alert("잔액 부족");
-
-  balance-=10000;
-  count++;
-
-  let r1=document.getElementById('r1');
-  let r2=document.getElementById('r2');
-  let r3=document.getElementById('r3');
-
-  fill(r1); fill(r2); fill(r3);
-
-  let i=0;
-  let loop=setInterval(()=>{
-    i++;
-
-    r1.style.transform=`translateY(${-i*80}px)`;
-    r2.style.transform=`translateY(${-((i+5)%20)*80}px)`;
-    r3.style.transform=`translateY(${-((i+10)%20)*80}px)`;
-
-    if(i>=20){
-      clearInterval(loop);
-
-      let win=(count%15==0);
-
-      if(win){
-        let n=Math.floor(Math.random()*10);
-        r1.style.transform=`translateY(${-n*80}px)`;
-        r2.style.transform=`translateY(${-n*80}px)`;
-        r3.style.transform=`translateY(${-n*80}px)`;
-
-        balance+=50000;
-        result.innerText="당첨!";
-      }else{
-        result.innerText="꽝";
-      }
-
-      update();
-    }
-  },80);
-}
-
-/* 카드 */
-function pickCard(type){
-  if(balance<10000)return alert("잔액 부족");
-
+function pickCard(choice){
+  if(balance<10000) return alert('잔액 부족!');
   balance-=10000;
 
   card.classList.remove('flipped');
+  cardBack.innerText='';
 
   setTimeout(()=>{
-    let win=(type=="red")?Math.random()<0.35:Math.random()<0.25;
+    let win=false;
 
-    cardBack.innerText=(win?"당첨":"꽝");
+    if(choice==='red') win=Math.random()<0.35;
+    if(choice==='black') win=Math.random()<0.25;
+
+    cardBack.innerText = choice.toUpperCase()+'\n'+(win?'당첨':'꽝');
     card.classList.add('flipped');
 
     if(win) balance+=20000;
 
-    result.innerText=win?"당첨!":"꽝";
-    update();
+    result.innerText=win?'당첨!':'꽝';
+    updateBalance();
   },300);
 }
 
-/* 룰렛 */
 function playRoulette(){
-  if(balance<10000)return alert("잔액 부족");
+  if(balance<10000) return alert('잔액 부족!');
   balance-=10000;
 
-  let win=Math.random()<0.1;
+  let winIndex=Math.floor(Math.random()*20);
+  let spins=720+Math.random()*360;
+  let finalDeg=spins+(winIndex*18);
 
-  if(win){
-    balance+=30000;
-    result.innerText="당첨!";
-  }else{
-    result.innerText="꽝";
-  }
+  wheel.style.transform='rotate('+finalDeg+'deg)';
 
-  update();
+  setTimeout(()=>{
+    if(winIndex===0){
+      balance+=30000;
+      result.innerText='당첨!';
+    } else {
+      result.innerText='꽝';
+    }
+    updateBalance();
+  },3000);
 }
 
-/* 충전 */
 function openCharge(){
-  if(chargeCount>=3)return alert("잔액 부족");
+  if(chargeCount>=3) return alert('잔액 부족');
 
-  let money=prompt("충전 금액");
-  let card=prompt("카드 번호 (XXXX-XXXX-XXXX-XXXX)");
+  let amount = prompt('충전 금액 입력 (숫자)');
+  let card = prompt('카드 번호 입력 (XXXX-XXXX-XXXX-XXXX)');
 
-  money=parseInt(money);
+  amount=parseInt(amount);
 
-  if(card && money>0){
-    balance+=money;
+  if(card && !isNaN(amount) && amount>0){
     chargeCount++;
-    alert("충전 되었습니다");
-    update();
+    balance+=amount;
+    alert('충전 되었습니다');
+    updateBalance();
   }
 }
 </script>
