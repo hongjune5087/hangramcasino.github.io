@@ -118,7 +118,7 @@
 </header>
 
 <h1>한가람 카지노</h1>
-<h2 id="balance">잔액: 200,000원</h2>
+<h2 id="balance">잔액: 100,000원</h2>
 
 <div id="slotGame">
   <h2>슬롯 머신</h2>
@@ -149,8 +149,8 @@
     </div>
   </div>
 
-  <button onclick="pickCard('red')">레드 카드</button>
-  <button onclick="pickCard('black')">블랙 카드</button>
+  <button onclick="pickCard('red')">RED CARD</button>
+  <button onclick="pickCard('black')">BLEAK CARD</button>
 </div>
 
 <div id="result"></div>
@@ -179,7 +179,7 @@ function initWheel(){
     let seg=document.createElement('div');
     seg.className='segment';
     seg.style.transform='rotate('+(i*18)+'deg) skewY(-72deg)';
-    seg.innerText=(i===0)?'당첨':'꽝';
+    seg.innerText=(i===0)?'당첨':'실패';
     seg.style.background=(i===0)?'green':'black';
     wheel.appendChild(seg);
   }
