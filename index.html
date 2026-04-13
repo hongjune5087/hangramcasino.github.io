@@ -272,6 +272,53 @@ function openCharge(){
     updateBalance();
   }
 }
+function spin(){
+  if(balance<10000) return alert('잔액 부족!');
+  balance-=10000; 
+  slotCounter++;
+
+  const s1 = document.getElementById('s1');
+  const s2 = document.getElementById('s2');
+  const s3 = document.getElementById('s3');
+
+  let c=0;
+  let i=setInterval(()=>{
+    s1.innerText=Math.floor(Math.random()*10);
+    s2.innerText=Math.floor(Math.random()*10);
+    s3.innerText=Math.floor(Math.random()*10);
+
+    if(++c>10){
+      clearInterval(i);
+
+      let win=(slotCounter%15===0);
+
+      if(win){
+        let num=Math.floor(Math.random()*10);
+        s1.innerText=num;
+        s2.innerText=num;
+        s3.innerText=num;
+
+        balance+=50000;
+        result.innerText='당첨!';
+      } else {
+        let n1=Math.floor(Math.random()*10);
+        let n2=Math.floor(Math.random()*10);
+        let n3=Math.floor(Math.random()*10);
+
+        if(n1===n2 && n2===n3) n3=(n3+1)%10;
+
+        s1.innerText=n1;
+        s2.innerText=n2;
+        s3.innerText=n3;
+
+        result.innerText='실패';
+      }
+
+      updateBalance();
+    }
+  },80);
+}
+
 </script>
 
 </body>
