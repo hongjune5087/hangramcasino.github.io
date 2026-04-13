@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>사이버 도박 예방</title>
+  <title>한가람 카지노</title>
   <style>
     body { 
       font-family: Arial; 
@@ -99,8 +99,8 @@
   </nav>
 </header>
 
-<h1>불법 도박 사이트</h1>
-<h2 id="balance">잔액: 200,000원</h2>
+<h1>한가람 카지노</h1>
+<h2 id="balance">잔액: 100,000원</h2>
 
 <div id="slotGame">
   <h2>슬롯 머신</h2>
@@ -122,8 +122,8 @@
       </div>
     </div>
   </div>
-  <button onclick="pickCard('red')">레드 카드</button>
-  <button onclick="pickCard('black')">블랙 카드</button>
+  <button onclick="pickCard('red')">RED CARD</button>
+  <button onclick="pickCard('black')">BLACK CARD</button>
 </div>
 
 <div id="result"></div>
@@ -203,7 +203,7 @@ function spin(){
       winSound.play();
       setTimeout(()=>document.body.classList.remove('flash'),500);
     } else {
-      result.innerText='꽝';
+      result.innerText='실패';
     }
 
     r1.style.top = -(n*80)+'px';
@@ -223,7 +223,7 @@ function pickCard(choice){
 
   setTimeout(()=>{
     let win = (choice==='red') ? Math.random()<0.35 : Math.random()<0.25;
-    cardBack.innerText = choice.toUpperCase()+'\n'+(win?'당첨':'꽝');
+    cardBack.innerText = choice.toUpperCase()+'\n'+(win?'당첨':'실패');
     card.classList.add('flipped');
 
     if(win){
@@ -233,7 +233,7 @@ function pickCard(choice){
       setTimeout(()=>document.body.classList.remove('flash'),500);
     }
 
-    result.innerText=win?'당첨!':'꽝';
+    result.innerText=win?'당첨!':'실패';
     updateBalance();
   },300);
 }
