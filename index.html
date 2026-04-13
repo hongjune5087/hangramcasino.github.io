@@ -272,7 +272,7 @@ function openCharge(){
     updateBalance();
   }
 }
-  function spin(){
+function spin(){
   if(balance<10000) return alert('잔액 부족!');
 
   balance -= 10000;
@@ -282,26 +282,33 @@ function openCharge(){
   let s2 = document.getElementById('s2');
   let s3 = document.getElementById('s3');
 
-  // 기본 회전 (느리게)
-  let rolling = setInterval(()=>{
+  // 각각 따로 돌림
+  let roll1 = setInterval(()=>{
     s1.innerText = Math.floor(Math.random()*10);
+  },120);
+
+  let roll2 = setInterval(()=>{
     s2.innerText = Math.floor(Math.random()*10);
+  },120);
+
+  let roll3 = setInterval(()=>{
     s3.innerText = Math.floor(Math.random()*10);
-  },120); // ← 속도 느림
+  },120);
 
   // 1번 멈춤
   setTimeout(()=>{
-    clearInterval(rolling);
-    s1.innerText = Math.floor(Math.random()*10);
+    clearInterval(roll1);
   },1500);
 
   // 2번 (2초 뒤)
   setTimeout(()=>{
-    s2.innerText = Math.floor(Math.random()*10);
+    clearInterval(roll2);
   },3500);
 
-  // 3번 + 결과 (또 2초 뒤)
+  // 3번 + 결과
   setTimeout(()=>{
+    clearInterval(roll3);
+
     let win = (slotCounter % 15 === 0);
 
     if(win){
@@ -313,7 +320,6 @@ function openCharge(){
       balance += 50000;
       result.innerText = '당첨!';
     } else {
-      s3.innerText = Math.floor(Math.random()*10);
       result.innerText = '꽝';
     }
 
