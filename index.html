@@ -282,35 +282,42 @@ function openCharge(){
   let s2 = document.getElementById('s2');
   let s3 = document.getElementById('s3');
 
-  let i = 0;
-
-  let loop = setInterval(()=>{
-    i++;
-
+  let rolling = setInterval(()=>{
     s1.innerText = Math.floor(Math.random()*10);
     s2.innerText = Math.floor(Math.random()*10);
     s3.innerText = Math.floor(Math.random()*10);
+  },50);
 
-    if(i >= 15){
-      clearInterval(loop);
+  // 1번 릴 멈춤
+  setTimeout(()=>{
+    clearInterval(rolling);
+    s1.innerText = Math.floor(Math.random()*10);
+  },700);
 
-      let win = (slotCounter % 15 === 0);
+  // 2번 릴 멈춤
+  setTimeout(()=>{
+    s2.innerText = Math.floor(Math.random()*10);
+  },1000);
 
-      if(win){
-        let n = Math.floor(Math.random()*10);
-        s1.innerText = n;
-        s2.innerText = n;
-        s3.innerText = n;
+  // 3번 릴 + 결과
+  setTimeout(()=>{
+    let win = (slotCounter % 15 === 0);
 
-        balance += 50000;
-        result.innerText = '당첨!';
-      } else {
-        result.innerText = '실패';
-      }
+    if(win){
+      let n = Math.floor(Math.random()*10);
+      s1.innerText = n;
+      s2.innerText = n;
+      s3.innerText = n;
 
-      updateBalance();
+      balance += 50000;
+      result.innerText = '당첨!';
+    } else {
+      s3.innerText = Math.floor(Math.random()*10);
+      result.innerText = '꽝';
     }
-  },100);
+
+    updateBalance();
+  },1300);
 }
 </script>
 
