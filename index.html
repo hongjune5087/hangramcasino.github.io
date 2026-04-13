@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>한가람 카지노</title>
+  <title>사이버 도박 예방</title>
   <style>
     body { 
       font-family: Arial; 
@@ -99,8 +99,8 @@
   </nav>
 </header>
 
-<h1>한가람 카지노</h1>
-<h2 id="balance">잔액: 100,000원</h2>
+<h1>불법 도박 사이트</h1>
+<h2 id="balance">잔액: 200,000원</h2>
 
 <div id="slotGame">
   <h2>슬롯 머신</h2>
@@ -122,8 +122,8 @@
       </div>
     </div>
   </div>
-  <button onclick="pickCard('red')">RED CARD</button>
-  <button onclick="pickCard('black')">BLACK CARD</button>
+  <button onclick="pickCard('red')">레드 카드</button>
+  <button onclick="pickCard('black')">블랙 카드</button>
 </div>
 
 <div id="result"></div>
@@ -180,7 +180,8 @@ function fillReel(el){
 
 function spin(){
   if(balance<10000) return alert('잔액 부족!');
-  balance-=10000; slotCounter++;
+  balance-=10000; 
+  slotCounter++;
 
   spinSound.currentTime=0;
   spinSound.play();
@@ -191,19 +192,42 @@ function spin(){
 
   fillReel(r1); fillReel(r2); fillReel(r3);
 
-  let win=(slotCounter%15===0);
+  let steps = 20; // 한바퀴
+  let current = 0;
 
-  setTimeout(()=>{
-    let n=Math.floor(Math.random()*10);
+  let interval = setInterval(()=>{
+    current++;
 
-    if(win){
-      result.innerText='당첨!';
-      balance+=50000;
-      document.body.classList.add('flash');
-      winSound.play();
-      setTimeout(()=>document.body.classList.remove('flash'),500);
-    } else {
-      result.innerText='실패';
+    r1.style.top = -(current%20 * 80)+'px';
+    r2.style.top = -((current+5)%20 * 80)+'px';
+    r3.style.top = -((current+10)%20 * 80)+'px';
+
+    if(current >= steps){
+      clearInterval(interval);
+
+      let win=(slotCounter%15===0);
+
+      if(win){
+        let n=Math.floor(Math.random()*10);
+
+        r1.style.top = -(n*80)+'px';
+        r2.style.top = -(n*80)+'px';
+        r3.style.top = -(n*80)+'px';
+
+        balance+=50000;
+        result.innerText='당첨!';
+        winSound.play();
+        document.body.classList.add('flash');
+        setTimeout(()=>document.body.classList.remove('flash'),500);
+      } else {
+        result.innerText='꽝';
+      }
+
+      updateBalance();
+    }
+  },100); // 한칸씩 이동 속도
+} else {
+      result.innerText='꽝';
     }
 
     r1.style.top = -(n*80)+'px';
@@ -223,7 +247,7 @@ function pickCard(choice){
 
   setTimeout(()=>{
     let win = (choice==='red') ? Math.random()<0.35 : Math.random()<0.25;
-    cardBack.innerText = choice.toUpperCase()+'\n'+(win?'당첨':'실패');
+    cardBack.innerText = choice.toUpperCase()+'\n'+(win?'당첨':'꽝');
     card.classList.add('flipped');
 
     if(win){
@@ -233,7 +257,7 @@ function pickCard(choice){
       setTimeout(()=>document.body.classList.remove('flash'),500);
     }
 
-    result.innerText=win?'당첨!':'실패';
+    result.innerText=win?'당첨!':'꽝';
     updateBalance();
   },300);
 }
