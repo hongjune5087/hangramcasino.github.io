@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>한가람 카지노</title>
+  <title>사이버 도박 예방</title>
   <style>
     body { 
       font-family: Arial; 
@@ -10,6 +10,14 @@
       margin: 0;
       background: radial-gradient(circle, #111, #000);
       color: #ff3b3b;
+      overflow-x:hidden;
+    }
+
+    .flash { animation: flash 0.3s 3; }
+    @keyframes flash {
+      0% { background:#000; }
+      50% { background:#330000; }
+      100% { background:#000; }
     }
 
     header { background:#111; padding:15px; border-bottom:2px solid red; }
@@ -17,79 +25,53 @@
 
     .hidden { display:none; }
 
-    .slot { font-size:60px; margin:10px; color:white; display:inline-block; width:40px; }
+    /* 슬롯 */
+    .reel {
+      display:inline-block;
+      width:50px;
+      height:80px;
+      overflow:hidden;
+      border:2px solid red;
+      margin:5px;
+      background:#000;
+      position:relative;
+    }
+
+    .numbers {
+      position:absolute;
+      width:100%;
+      transition: top 0.5s ease-out;
+    }
+
+    .numbers div {
+      height:80px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:40px;
+      color:white;
+    }
 
     #result { margin-top:20px; font-size:30px; color:white; height:40px; }
 
-    .wheel {
-      width:220px;
-      height:220px;
-      border:5px solid red;
-      border-radius:50%;
-      margin:20px auto;
-      position:relative;
-      transition: transform 3s ease-out;
-      overflow:hidden;
+    /* 잔액 애니메이션 */
+    .money-change {
+      animation: pop 0.3s;
+    }
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); color:yellow; }
+      100% { transform: scale(1); }
     }
 
-    .pointer {
-      width:0;
-      height:0;
-      border-left:10px solid transparent;
-      border-right:10px solid transparent;
-      border-top:20px solid yellow;
-      margin:0 auto;
-    }
-
-    .segment {
-      position:absolute;
-      width:50%;
-      height:50%;
-      transform-origin:100% 100%;
-      font-size:10px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:white;
-    }
-
-    /* 카드 애니메이션 */
+    /* 카드 */
     .card-area{ perspective:1000px; margin-top:20px; }
-
-    .card{
-      width:140px;
-      height:200px;
-      margin:0 auto;
-      position:relative;
-      transform-style:preserve-3d;
-      transition: transform 0.8s;
-    }
-
+    .card{ width:140px;height:200px;margin:0 auto;position:relative;transform-style:preserve-3d;transition: transform 0.8s; }
     .card.flipped{ transform: rotateY(180deg); }
-
     .inner{ width:100%; height:100%; position:absolute; transform-style:preserve-3d; }
-
-    .front, .back{
-      position:absolute;
-      width:100%;
-      height:100%;
-      backface-visibility:hidden;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:22px;
-      border:2px solid red;
-      border-radius:10px;
-    }
-
+    .front, .back{ position:absolute;width:100%;height:100%;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid red;border-radius:10px; }
     .front{ background:#111; }
-
-    .back{
-      transform: rotateY(180deg);
-      background:#222;
-      color:white;
-      white-space:pre;
-    }
+    .back{ transform: rotateY(180deg); background:#222; color:white; white-space:pre; }
 
     #loginScreen { margin-top:150px; }
     input { padding:10px; margin:5px; }
@@ -117,29 +99,21 @@
   </nav>
 </header>
 
-<h1>한가람 카지노</h1>
-<h2 id="balance">잔액: 100,000원</h2>
+<h1>불법 도박 사이트</h1>
+<h2 id="balance">잔액: 200,000원</h2>
 
 <div id="slotGame">
   <h2>슬롯 머신</h2>
   <div>
-    <span class="slot" id="s1">0</span>
-    <span class="slot" id="s2">0</span>
-    <span class="slot" id="s3">0</span>
+    <div class="reel"><div class="numbers" id="r1"></div></div>
+    <div class="reel"><div class="numbers" id="r2"></div></div>
+    <div class="reel"><div class="numbers" id="r3"></div></div>
   </div>
   <button onclick="spin()">돌리기</button>
 </div>
 
-<div id="rouletteGame" class="hidden">
-  <h2>룰렛 (20칸)</h2>
-  <div class="pointer"></div>
-  <div id="wheel" class="wheel"></div>
-  <button onclick="playRoulette()">돌리기</button>
-</div>
-
 <div id="cardGame" class="hidden">
   <h2>카드 뽑기</h2>
-
   <div class="card-area">
     <div id="card" class="card">
       <div class="inner">
@@ -148,9 +122,8 @@
       </div>
     </div>
   </div>
-
-  <button onclick="pickCard('red')">RED CARD</button>
-  <button onclick="pickCard('black')">BLACK CARD</button>
+  <button onclick="pickCard('red')">레드 카드</button>
+  <button onclick="pickCard('black')">블랙 카드</button>
 </div>
 
 <div id="result"></div>
@@ -162,39 +135,25 @@ let balance = 200000;
 let chargeCount = 0;
 let slotCounter = 0;
 
-const wheel = document.getElementById('wheel');
-const loginScreen = document.getElementById('loginScreen');
-const main = document.getElementById('main');
 const result = document.getElementById('result');
 const balanceEl = document.getElementById('balance');
-const slotGame = document.getElementById('slotGame');
-const rouletteGame = document.getElementById('rouletteGame');
-const cardGame = document.getElementById('cardGame');
 const card = document.getElementById('card');
 const cardBack = document.getElementById('cardBack');
 
-function initWheel(){
-  wheel.innerHTML='';
-  for(let i=0;i<20;i++){
-    let seg=document.createElement('div');
-    seg.className='segment';
-    seg.style.transform='rotate('+(i*18)+'deg) skewY(-72deg)';
-    seg.innerText=(i===0)?'당첨':'실패';
-    seg.style.background=(i===0)?'green':'black';
-    wheel.appendChild(seg);
-  }
-}
-initWheel();
+/* 효과음 */
+const spinSound = new Audio('https://actions.google.com/sounds/v1/casino/slot_machine.ogg');
+const winSound = new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg');
 
 function format(num){return num.toLocaleString();}
-function updateBalance(){
+function updateBalance(){ 
   balanceEl.innerText='잔액: '+format(balance)+'원';
+  balanceEl.classList.add('money-change');
+  setTimeout(()=>balanceEl.classList.remove('money-change'),300);
 }
 
 function login(){
   const id=document.getElementById('id').value;
   const pw=document.getElementById('pw').value;
-
   if(id && pw){
     loginScreen.classList.add('hidden');
     main.classList.remove('hidden');
@@ -205,12 +164,54 @@ function login(){
 
 function showGame(g){
   slotGame.classList.add('hidden');
-  rouletteGame.classList.add('hidden');
   cardGame.classList.add('hidden');
-
-  if(g==='roulette') rouletteGame.classList.remove('hidden');
-  else if(g==='card') cardGame.classList.remove('hidden');
+  if(g==='card') cardGame.classList.remove('hidden');
   else slotGame.classList.remove('hidden');
+}
+
+function fillReel(el){
+  el.innerHTML='';
+  for(let i=0;i<20;i++){
+    let d=document.createElement('div');
+    d.innerText=Math.floor(Math.random()*10);
+    el.appendChild(d);
+  }
+}
+
+function spin(){
+  if(balance<10000) return alert('잔액 부족!');
+  balance-=10000; slotCounter++;
+
+  spinSound.currentTime=0;
+  spinSound.play();
+
+  const r1=document.getElementById('r1');
+  const r2=document.getElementById('r2');
+  const r3=document.getElementById('r3');
+
+  fillReel(r1); fillReel(r2); fillReel(r3);
+
+  let win=(slotCounter%15===0);
+
+  setTimeout(()=>{
+    let n=Math.floor(Math.random()*10);
+
+    if(win){
+      result.innerText='당첨!';
+      balance+=50000;
+      document.body.classList.add('flash');
+      winSound.play();
+      setTimeout(()=>document.body.classList.remove('flash'),500);
+    } else {
+      result.innerText='꽝';
+    }
+
+    r1.style.top = -(n*80)+'px';
+    r2.style.top = -(n*80)+'px';
+    r3.style.top = -(n*80)+'px';
+
+    updateBalance();
+  },500);
 }
 
 function pickCard(choice){
@@ -221,50 +222,27 @@ function pickCard(choice){
   cardBack.innerText='';
 
   setTimeout(()=>{
-    let win=false;
-
-    if(choice==='red') win=Math.random()<0.35;
-    if(choice==='black') win=Math.random()<0.25;
-
-    cardBack.innerText = choice.toUpperCase()+'\n'+(win?'당첨':'실패');
+    let win = (choice==='red') ? Math.random()<0.35 : Math.random()<0.25;
+    cardBack.innerText = choice.toUpperCase()+'\n'+(win?'당첨':'꽝');
     card.classList.add('flipped');
 
-    if(win) balance+=20000;
+    if(win){
+      balance+=20000;
+      winSound.play();
+      document.body.classList.add('flash');
+      setTimeout(()=>document.body.classList.remove('flash'),500);
+    }
 
-    result.innerText=win?'당첨!':'실패';
+    result.innerText=win?'당첨!':'꽝';
     updateBalance();
   },300);
 }
 
-function playRoulette(){
-  if(balance<10000) return alert('잔액 부족!');
-  balance-=10000;
-
-  let winIndex=Math.floor(Math.random()*20);
-  let spins=720+Math.random()*360;
-  let finalDeg=spins+(winIndex*18);
-
-  wheel.style.transform='rotate('+finalDeg+'deg)';
-
-  setTimeout(()=>{
-    if(winIndex===0){
-      balance+=30000;
-      result.innerText='당첨!';
-    } else {
-      result.innerText='실패';
-    }
-    updateBalance();
-  },3000);
-}
-
 function openCharge(){
   if(chargeCount>=3) return alert('잔액 부족');
-
   let amount = prompt('충전 금액 입력 (숫자)');
   let card = prompt('카드 번호 입력 (XXXX-XXXX-XXXX-XXXX)');
-
   amount=parseInt(amount);
-
   if(card && !isNaN(amount) && amount>0){
     chargeCount++;
     balance+=amount;
@@ -272,53 +250,6 @@ function openCharge(){
     updateBalance();
   }
 }
-function spin(){
-  if(balance<10000) return alert('잔액 부족!');
-  balance-=10000; 
-  slotCounter++;
-
-  const s1 = document.getElementById('s1');
-  const s2 = document.getElementById('s2');
-  const s3 = document.getElementById('s3');
-
-  let c=0;
-  let i=setInterval(()=>{
-    s1.innerText=Math.floor(Math.random()*10);
-    s2.innerText=Math.floor(Math.random()*10);
-    s3.innerText=Math.floor(Math.random()*10);
-
-    if(++c>10){
-      clearInterval(i);
-
-      let win=(slotCounter%15===0);
-
-      if(win){
-        let num=Math.floor(Math.random()*10);
-        s1.innerText=num;
-        s2.innerText=num;
-        s3.innerText=num;
-
-        balance+=50000;
-        result.innerText='당첨!';
-      } else {
-        let n1=Math.floor(Math.random()*10);
-        let n2=Math.floor(Math.random()*10);
-        let n3=Math.floor(Math.random()*10);
-
-        if(n1===n2 && n2===n3) n3=(n3+1)%10;
-
-        s1.innerText=n1;
-        s2.innerText=n2;
-        s3.innerText=n3;
-
-        result.innerText='실패';
-      }
-
-      updateBalance();
-    }
-  },80);
-}
-
 </script>
 
 </body>
