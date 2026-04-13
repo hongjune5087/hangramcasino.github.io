@@ -282,24 +282,25 @@ function openCharge(){
   let s2 = document.getElementById('s2');
   let s3 = document.getElementById('s3');
 
+  // 기본 회전 (느리게)
   let rolling = setInterval(()=>{
     s1.innerText = Math.floor(Math.random()*10);
     s2.innerText = Math.floor(Math.random()*10);
     s3.innerText = Math.floor(Math.random()*10);
-  },50);
+  },120); // ← 속도 느림
 
-  // 1번 릴 멈춤
+  // 1번 멈춤
   setTimeout(()=>{
     clearInterval(rolling);
     s1.innerText = Math.floor(Math.random()*10);
-  },700);
+  },1500);
 
-  // 2번 릴 멈춤
+  // 2번 (2초 뒤)
   setTimeout(()=>{
     s2.innerText = Math.floor(Math.random()*10);
-  },1000);
+  },3500);
 
-  // 3번 릴 + 결과
+  // 3번 + 결과 (또 2초 뒤)
   setTimeout(()=>{
     let win = (slotCounter % 15 === 0);
 
@@ -317,7 +318,7 @@ function openCharge(){
     }
 
     updateBalance();
-  },1300);
+  },5500);
 }
 </script>
 
