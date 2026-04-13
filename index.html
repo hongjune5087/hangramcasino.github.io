@@ -154,10 +154,17 @@ function updateBalance(){
 function login(){
   const id=document.getElementById('id').value;
   const pw=document.getElementById('pw').value;
+
+  const loginScreen = document.getElementById('loginScreen');
+  const main = document.getElementById('main');
+
   if(id && pw){
     loginScreen.classList.add('hidden');
     main.classList.remove('hidden');
   } else {
+    document.getElementById('loginMsg').innerText='로그인 실패';
+  }
+} else {
     document.getElementById('loginMsg').innerText='로그인 실패';
   }
 }
